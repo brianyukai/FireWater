@@ -64,6 +64,8 @@ package screens
 				keko.x = paredder.x- keko.width;
 			}
 			
+			//Añado esta linea para probar el Git
+			
 			else if (keko.x - paredizq.width < paredizq.x) 
 			{
 				keko.x = paredizq.x + paredizq.width;
