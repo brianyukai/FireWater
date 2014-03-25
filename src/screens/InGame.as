@@ -22,6 +22,7 @@ package screens
 		
 		private var floor:Image;
 		private var keko:Image;
+		private var bala:Image;
 		private var paredizq:Image;
 		private var paredder:Image;
 		private var chustafondo:Image;
@@ -31,6 +32,7 @@ package screens
 		private var bg:Image;
 		private var voleyball:Image;
 		private var movingDown:Boolean = true;
+		private var disparado:Boolean = false;
 		
 		
 		public function InGame() 
@@ -70,7 +72,25 @@ package screens
 			{
 				keko.x = paredizq.x + paredizq.width;
 			}
-						
+			
+			if (disparado == false) 
+			{
+				bala.x = keko.x + keko.width/2;
+				bala.y = keko.y;
+				
+			}
+			
+			else 
+			{
+				bala.y -= 3;
+			}
+			
+			if (bala.y < 0) 
+			{
+				bala.visible = false; //Aqui quiero destruirlo cuando salga de la pantalla, pero no sé como
+			}
+			
+			
 			
 		}
 		
@@ -83,6 +103,10 @@ package screens
 				keko.x += -10;
 			else if(event.keyCode == Keyboard.D && movingDown)
 				keko.x += 10;
+			else if (event.keyCode == Keyboard.G) 
+			{
+				disparado = true;
+			}
 			
 		}
 		
@@ -121,10 +145,12 @@ package screens
 				new PhysicsProperties ( {
 				isDynamic:false, friction: 0.5, restitution:0.1 } ));
 				
+				/*
 				var voleyball:PhysicsObject = physics.injectPhysics(voleyball,
 				PhysInjector.CIRCLE,
 				new PhysicsProperties ( {
 				isDinamic:true,isDraggable:false, friction: 0.2, restitution:0.9 } ));
+				*/
 			/*	
 			
 				
@@ -136,7 +162,8 @@ package screens
 			var basketball:PhysicsObject = 
 				physics.injectPhysics(basketBall, 
 				PhysInjector.CIRCLE, new PhysicsProperties
-				( { isDynamic:true, friction:0.2, restitution:0.9 } ));*/
+				( { isDynamic:true, friction:0.2, restitution:0.9 } ));
+				*/
 				
 				
 		}
@@ -167,12 +194,12 @@ package screens
             floor.y = stage.stageHeight - floor.height - 50;
             this.addChild(floor);
 			
-			
+			/*
             voleyball = new Image(Assets.getTexture("voleyball"));
 			voleyball.x = stage.stageWidth * 0.5 - voleyball.width * 0.45;
 			voleyball.y = 200;
 			this.addChild(voleyball);
-			/**/
+			*/
 			
             /*basketBall = new Image(Assets.getTexture("images"));
             
@@ -196,6 +223,12 @@ package screens
             keko.y = 450;
 			this.addChild(keko);
 			
+			bala = new Image(Assets.getTexture("bala"));
+			bala.width = bala.width / 10;
+			bala.height = bala.height / 10;
+			bala.x = keko.x + keko.width/2;
+			bala.y = keko.y;
+			this.addChild(bala);
 			
 			
 			

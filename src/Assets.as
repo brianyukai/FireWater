@@ -14,6 +14,9 @@ package
 		[Embed(source = "../media/graphics/chustavolcan.png")]
 		public static const chustavolcan:Class;
 		
+		[Embed(source = "../media/graphics/bala.png")]
+		public static const bala:Class;
+		
 		[Embed(source = "../media/graphics/descarga.jpg")]
 		public static const descarga:Class;
 				
