@@ -31,7 +31,7 @@ package screens
         private var physics:PhysInjector;
 		private var bg:Image;
 		private var voleyball:Image;
-		private var movingDown:Boolean = true;
+		//private var movingDown:Boolean = true;
 		private var disparado:Boolean = false;
 		
 		private var proyectiles:Vector.<Image>;
@@ -64,6 +64,8 @@ package screens
 		{
 			physics.update();
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, _handleKeyDown);
+			stage.addEventListener(KeyboardEvent.KEY_UP, _handleKeyUp);
+			
 			if (keko.x > paredder.x - keko.width) 
 			{
 				keko.x = paredder.x- keko.width;
@@ -110,16 +112,13 @@ package screens
 		
 		private function _handleKeyDown(event:KeyboardEvent):void 
 		{
-			/*if(event.keyCode == Keyboard.DOWN)
-				movingDown = true;*/
-				
-			if(event.keyCode == Keyboard.A && movingDown)
+			if(event.keyCode == Keyboard.A )
 				keko.x += -10;
-			else if(event.keyCode == Keyboard.D && movingDown)
+			else if(event.keyCode == Keyboard.D )
 				keko.x += 10;
-			else if (event.keyCode == Keyboard.G) 
+			else if (event.keyCode == Keyboard.G && disparado == false) 
 			{
-				//He movido aquí el spawner porque me daba problemas con el booleana. Trabajaremos en ello.
+				 //He movido aquí el spawner porque me daba problemas con el booleano. Trabajaremos en ello.
 				bala = new Image(Assets.getTexture("bala"));
 				bala.width = bala.width / 10;
 				bala.height = bala.height / 10;
@@ -128,15 +127,20 @@ package screens
 				this.addChild(bala);
 				
 				proyectiles.push(bala);
-				
+				disparado = true;
+					
 			}
 			
 		}
 		
 		private function _handleKeyUp(event:KeyboardEvent):void 
 		{
-			 if(event.keyCode == Keyboard.G)
+			 if (event.keyCode == Keyboard.G)
+			 {	
 				disparado = false;
+			 }
+				
+			 
 		}
 		
 		private function injectPhysics():void 
@@ -174,9 +178,9 @@ package screens
 				new PhysicsProperties ( {
 				isDinamic:true,isDraggable:false, friction: 0.2, restitution:0.9 } ));
 				*/
-			/*	
-			
 				
+			
+			/*	
 			 var tennisball:PhysicsObject = 
 				physics.injectPhysics(tennisBall, 
 				PhysInjector.CIRCLE, new PhysicsProperties
@@ -187,6 +191,7 @@ package screens
 				PhysInjector.CIRCLE, new PhysicsProperties
 				( { isDynamic:true, friction:0.2, restitution:0.9 } ));
 				*/
+				
 				
 				
 		}
@@ -224,26 +229,25 @@ package screens
 			this.addChild(voleyball);
 			*/
 			
-            /*basketBall = new Image(Assets.getTexture("images"));
+			/*
+            basketBall = new Image(Assets.getTexture("images"));
             
             basketBall.x = stage.stageWidth * 0.5 - basketBall.width * 0.6;
             basketBall.y = 10;
             this.addChild(basketBall);
 			
 			
-			
-			
-			
 			tennisBall = new Image(Assets.getTexture("tenis"));
             
             tennisBall.x = stage.stageWidth * 0.5 - tennisBall.width * 0.45;
             tennisBall.y = 300;
-            this.addChild(tennisBall);*/
+            this.addChild(tennisBall);
+			*/
 			
 			keko = new Image (Assets.getTexture("descarga"));
 			
 			keko.x = stage.stageWidth * 0.5 - keko.width * 0.45;
-            keko.y = 450;
+            keko.y = 470;
 			this.addChild(keko);
 			
 			/*
