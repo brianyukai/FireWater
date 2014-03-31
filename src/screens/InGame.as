@@ -34,6 +34,7 @@ package screens
 		private var movingDown:Boolean = true;
 		private var disparado:Boolean = false;
 		
+		private var proyectiles:Vector.<Image>;
 		
 		public function InGame() 
 		{
@@ -50,6 +51,8 @@ package screens
 						
 			createSprites();
             injectPhysics();
+			
+			proyectiles = new Vector.<Image>();
 			
 			addEventListener(Event.ENTER_FRAME, onUpdate);
 			trace("InGame screen initialized");
@@ -73,6 +76,7 @@ package screens
 				keko.x = paredizq.x + paredizq.width;
 			}
 			
+			/*
 			if (disparado == false) 
 			{
 				bala.x = keko.x + keko.width/2;
@@ -85,11 +89,21 @@ package screens
 				bala.y -= 3;
 			}
 			
+			*/
+			
+			//Este es el bucle que mueve todas las balas del vector que las contiene			
+			for (var i:uint = 0; i < proyectiles.length; i++)
+			{
+				proyectiles[i].y -= 3;
+			}
+			
+			/*
 			if (bala.y < 0) 
 			{
 				bala.visible = false; //Aqui quiero destruirlo cuando salga de la pantalla, pero no sé como
 			}
 			
+			*/
 			
 			
 		}
@@ -105,16 +119,25 @@ package screens
 				keko.x += 10;
 			else if (event.keyCode == Keyboard.G) 
 			{
-				disparado = true;
+				//He movido aquí el spawner porque me daba problemas con el booleana. Trabajaremos en ello.
+				bala = new Image(Assets.getTexture("bala"));
+				bala.width = bala.width / 10;
+				bala.height = bala.height / 10;
+				bala.x = keko.x + keko.width/2;
+				bala.y = keko.y;
+				this.addChild(bala);
+				
+				proyectiles.push(bala);
+				
 			}
 			
 		}
 		
-		/*private function _handleKeyUp(event:KeyboardEvent):void 
+		private function _handleKeyUp(event:KeyboardEvent):void 
 		{
-			 if(event.keyCode == Keyboard.UP)
-				movingDown = false;
-		}*/
+			 if(event.keyCode == Keyboard.G)
+				disparado = false;
+		}
 		
 		private function injectPhysics():void 
 		{
@@ -223,12 +246,14 @@ package screens
             keko.y = 450;
 			this.addChild(keko);
 			
+			/*
 			bala = new Image(Assets.getTexture("bala"));
 			bala.width = bala.width / 10;
 			bala.height = bala.height / 10;
 			bala.x = keko.x + keko.width/2;
 			bala.y = keko.y;
 			this.addChild(bala);
+			*/
 			
 			
 			
