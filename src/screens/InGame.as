@@ -21,6 +21,8 @@ package screens
 	public class InGame extends Sprite
 	{
 		
+		public var voleyball_phys:PhysicsObject;
+		
 		private var floor:Image;
 		private var keko:Image;
 		private var bala:Image;
@@ -75,7 +77,7 @@ package screens
 			trace(segundos_pasados);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, _handleKeyDown);
 			stage.addEventListener(KeyboardEvent.KEY_UP, _handleKeyUp);
-			/*
+			
 			if (keko.x > paredder.x - keko.width) 
 			{
 				keko.x = paredder.x- keko.width;
@@ -87,7 +89,7 @@ package screens
 			{
 				keko.x = paredizq.x + paredizq.width;
 			}
-			*/
+			
 			/*
 			if (disparado == false) 
 			{
@@ -107,8 +109,22 @@ package screens
 			for (var i:uint = 0; i < proyectiles.length; i++)
 			{
 				proyectiles[i].y -= 3;
+				if (proyectiles[i].bounds.intersects(voleyball.bounds) )
+				{
+					
+					//TODO: Corregirlo, a la larga consumirá mucha memoria
+					voleyball_phys.physicsProperties.active = false;
+					voleyball.visible = false;
+					
+					
+					this.removeChild(proyectiles[i]);
+				}
 			}
 			
+			if (voleyball.bounds.intersects(keko.bounds)) 
+			{
+				//Para Laura -- GameOver
+			}
 			/*
 			if (bala.y < 0) 
 			{
@@ -167,16 +183,19 @@ package screens
 			
 			physics = new PhysInjector(Starling.current.nativeStage, new b2Vec2(0, 5), true);
 			
-            var floorObject:PhysicsObject = physics.injectPhysics(floor, 
+		    var floorObject:PhysicsObject = physics.injectPhysics(floor, 
 				PhysInjector.SQUARE,
 				new PhysicsProperties( {
-				isDynamic:false, friction:0, restitution:1} ));
+				isDynamic:false,friction:0, restitution:1} ));
 				
-			var voleyball:PhysicsObject = physics.injectPhysics(voleyball,
+			 voleyball_phys = physics.injectPhysics(voleyball,
 				PhysInjector.CIRCLE,
 				new PhysicsProperties ( {
-				isDinamic:true, isDraggable:false, friction: 0, restitution:1 } ));
+				isDinamic:true, isDraggable:false, friction: 0, restitution:1, linearDamping:0 } ));
+			
 				
+				
+			
         
 			var paredderecha:PhysicsObject = physics.injectPhysics(paredizq,
 				PhysInjector.SQUARE,
@@ -190,12 +209,12 @@ package screens
 				PhysInjector.SQUARE,
 				new PhysicsProperties ( {
 				isDynamic:false, friction: 0.5, restitution:0.5 } ));
-			/*	
+				
 			var keko_physics:PhysicsObject = physics.injectPhysics(keko,
 				PhysInjector.SQUARE,
 				new PhysicsProperties ( {
 				isDynamic:false, friction: 0.5, restitution:0.1 } ));
-				*/
+				
 				
 				
 			
@@ -267,13 +286,13 @@ package screens
             tennisBall.y = 300;
             this.addChild(tennisBall);
 			*/
-			/*
+			
 			keko = new Image (Assets.getTexture("descarga"));
 			
 			keko.x = stage.stageWidth * 0.5 - keko.width * 0.45;
             keko.y = 470;
 			this.addChild(keko);
-			*/
+			
 			
 			/*
 			bala = new Image(Assets.getTexture("bala"));
