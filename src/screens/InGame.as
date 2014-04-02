@@ -1,6 +1,7 @@
 package screens
 {
 	import flash.ui.Keyboard;
+	import flash.utils.getTimer;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.display.Image;
@@ -34,6 +35,12 @@ package screens
 		//private var movingDown:Boolean = true;
 		private var disparado:Boolean = false;
 		
+		private var timePrevious:Number;
+		private var timeCurrent:Number;
+		private var elapsed:Number;
+		private var segundos_pasados:Number = 0;
+		private const delay = 5;
+		
 		private var proyectiles:Vector.<Image>;
 		
 		public function InGame() 
@@ -54,7 +61,8 @@ package screens
 			
 			proyectiles = new Vector.<Image>();
 			
-			addEventListener(Event.ENTER_FRAME, onUpdate);
+			this.addEventListener(Event.ENTER_FRAME, onUpdate);
+			this.addEventListener(Event.ENTER_FRAME, checkElapsed);
 			trace("InGame screen initialized");
 			
 			
@@ -63,9 +71,11 @@ package screens
 		private function onUpdate(event:Event):void 
 		{
 			physics.update();
+			
+			trace(segundos_pasados);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, _handleKeyDown);
 			stage.addEventListener(KeyboardEvent.KEY_UP, _handleKeyUp);
-			
+			/*
 			if (keko.x > paredder.x - keko.width) 
 			{
 				keko.x = paredder.x- keko.width;
@@ -77,7 +87,7 @@ package screens
 			{
 				keko.x = paredizq.x + paredizq.width;
 			}
-			
+			*/
 			/*
 			if (disparado == false) 
 			{
@@ -116,9 +126,12 @@ package screens
 				keko.x += -10;
 			else if(event.keyCode == Keyboard.D )
 				keko.x += 10;
-			else if (event.keyCode == Keyboard.G && disparado == false) 
+			else if (event.keyCode == Keyboard.G && disparado == false ) 
 			{
-				 //He movido aquí el spawner porque me daba problemas con el booleano. Trabajaremos en ello.
+				
+				if (timeCurrent - segundos_pasados > delay ) 
+				{
+					 //He movido aquí el spawner porque me daba problemas con el booleano. Trabajaremos en ello.
 				bala = new Image(Assets.getTexture("bala"));
 				bala.width = bala.width / 10;
 				bala.height = bala.height / 10;
@@ -126,8 +139,14 @@ package screens
 				bala.y = keko.y;
 				this.addChild(bala);
 				
+				
 				proyectiles.push(bala);
 				disparado = true;
+				segundos_pasados = timeCurrent;
+				
+				}
+				
+				
 					
 			}
 			
@@ -145,13 +164,18 @@ package screens
 		
 		private function injectPhysics():void 
 		{
-						
-			physics = new PhysInjector(Starling.current.nativeStage, new b2Vec2(0, 60), true);
+			
+			physics = new PhysInjector(Starling.current.nativeStage, new b2Vec2(0, 5), true);
 			
             var floorObject:PhysicsObject = physics.injectPhysics(floor, 
 				PhysInjector.SQUARE,
 				new PhysicsProperties( {
-				isDynamic:false, friction:0.5, restitution:0.5 } ));
+				isDynamic:false, friction:0, restitution:1} ));
+				
+			var voleyball:PhysicsObject = physics.injectPhysics(voleyball,
+				PhysInjector.CIRCLE,
+				new PhysicsProperties ( {
+				isDinamic:true, isDraggable:false, friction: 0, restitution:1 } ));
 				
         
 			var paredderecha:PhysicsObject = physics.injectPhysics(paredizq,
@@ -166,18 +190,17 @@ package screens
 				PhysInjector.SQUARE,
 				new PhysicsProperties ( {
 				isDynamic:false, friction: 0.5, restitution:0.5 } ));
-				
+			/*	
 			var keko_physics:PhysicsObject = physics.injectPhysics(keko,
 				PhysInjector.SQUARE,
 				new PhysicsProperties ( {
 				isDynamic:false, friction: 0.5, restitution:0.1 } ));
-				
-				/*
-				var voleyball:PhysicsObject = physics.injectPhysics(voleyball,
-				PhysInjector.CIRCLE,
-				new PhysicsProperties ( {
-				isDinamic:true,isDraggable:false, friction: 0.2, restitution:0.9 } ));
 				*/
+				
+				
+			
+				
+				
 				
 			
 			/*	
@@ -222,12 +245,13 @@ package screens
             floor.y = stage.stageHeight - floor.height - 50;
             this.addChild(floor);
 			
-			/*
+			
             voleyball = new Image(Assets.getTexture("voleyball"));
 			voleyball.x = stage.stageWidth * 0.5 - voleyball.width * 0.45;
-			voleyball.y = 200;
+			voleyball.y = -100;
 			this.addChild(voleyball);
-			*/
+			
+			
 			
 			/*
             basketBall = new Image(Assets.getTexture("images"));
@@ -243,12 +267,13 @@ package screens
             tennisBall.y = 300;
             this.addChild(tennisBall);
 			*/
-			
+			/*
 			keko = new Image (Assets.getTexture("descarga"));
 			
 			keko.x = stage.stageWidth * 0.5 - keko.width * 0.45;
             keko.y = 470;
 			this.addChild(keko);
+			*/
 			
 			/*
 			bala = new Image(Assets.getTexture("bala"));
@@ -275,10 +300,16 @@ package screens
 		{
 			this.visible = false;
 			
-			
 		}
 		
-				
+		private function checkElapsed(event:Event):void
+		{
+			
+			timeCurrent = Math.round(getTimer()/100) ;
+			/*timePrevious = timeCurrent;
+			
+			elapsed = (timeCurrent - timePrevious);*/
+		}
 		
 		
 	}
